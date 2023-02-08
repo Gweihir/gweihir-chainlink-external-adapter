@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-postgres
+  namespace: storage
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+    app: {{ include "gweihir-dev.fullname" . }}-postgres
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "gweihir-dev.selectorLabels" . | nindent 6 }}
+      app: {{ include "gweihir-dev.fullname" . }}-postgres
+  template:
+    metadata:
+      labels:
+        {{- include "gweihir-dev.selectorLabels" . | nindent 8 }}
+        app: {{ include "gweihir-dev.fullname" . }}-postgres
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-postgres
+          image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
+          imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: {{ include "gweihir-dev.fullname" . }}-postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+            - mountPath: /docker-entrypoint-initdb.d/
+              name: config-init-scripts
+          resources: {}
+          command: ["docker-entrypoint.sh","postgres"]
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: {{ include "gweihir-dev.fullname" . }}-postgres-data-pvc
+        - name: config-init-scripts
+          configMap:
+            name: {{ include "gweihir-dev.fullname" . }}-postgres-init

@@ -1,0 +1,21 @@
+# Declare variables to be passed into your templates.
+
+
+# Postgresql setup
+postgres:
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 13.3
+  service:
+    type: ClusterIP
+    port: 80
+    env:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 'ASDFasdf1234@@(0'
+      POSTGRES_DB: admindb
+      CHAINLINK_DB_USER: clnode
+      CHAINLINK_DB_PASSWORD: 'mysecretpassword'
+      CHAINLINK_DB: chainlink
+      POSTGRES_STORAGE_DIR: 

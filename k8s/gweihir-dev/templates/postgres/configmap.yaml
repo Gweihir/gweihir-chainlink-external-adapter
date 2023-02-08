@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-postgres-init
+  namespace: storage
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+data:
+  init.sh: |-
+    #!/bin/bash
+    set -e
+
+    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+        SELECT NOW();
+    EOSQL
+
+    echo "init chainlink user "
+
+    psql --username "$POSTGRES_USER"  --dbname "$POSTGRES_DB" -c "SELECT FROM pg_catalog.pg_roles WHERE  rolname = '{{ .Values.postgres.env.CHAINLINK_DB_USER }}'"  | grep -q 1 || psql --username "$POSTGRES_USER"  --dbname "$POSTGRES_DB" -c "CREATE ROLE {{ .Values.postgres.env.CHAINLINK_DB_USER }} LOGIN PASSWORD '{{ .Values.postgres.env.CHAINLINK_DB_PASSWORD }}';"
+
+    echo "create chainlink DB"
+
+    psql --username "$POSTGRES_USER"  --dbname "$POSTGRES_DB" -c "SELECT FROM pg_database WHERE datname = '{{ .Values.postgres.env.CHAINLINK_DB }}'"  | grep -q 1 || psql --username "$POSTGRES_USER"  --dbname "$POSTGRES_DB" -c "CREATE DATABASE \"{{ .Values.postgres.env.CHAINLINK_DB }}\";"
+
+    echo "grant chainlink user access to chainlink DB"
+
+    psql --username "$POSTGRES_USER"  --dbname "$POSTGRES_DB" -c "GRANT ALL PRIVILEGES ON DATABASE \"{{ .Values.postgres.env.CHAINLINK_DB }}\" TO {{ .Values.postgres.env.CHAINLINK_DB_USER }};"

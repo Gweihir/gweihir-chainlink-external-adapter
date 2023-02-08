@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-postgres
+  namespace: storage
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.postgres.service.type }}
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: {{ include "gweihir-dev.fullname" . }}-postgres

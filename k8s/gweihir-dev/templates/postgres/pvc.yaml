@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-postgres-data-pvc
+  namespace: storage
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      usedBy: {{ include "gweihir-dev.fullname" . }}-postgres
+  storageClassName: {{ include "gweihir-dev.fullname" . }}-local-storage
+  volumeMode: Filesystem
+  volumeName: {{ include "gweihir-dev.fullname" . }}-postgres-pv
