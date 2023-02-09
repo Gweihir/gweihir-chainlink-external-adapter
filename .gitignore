@@ -1,5 +1,7 @@
+build/
 node_modules/
 postgres-data/
 .env
 .envrc
 .values.local.yaml
+config/addr.json
