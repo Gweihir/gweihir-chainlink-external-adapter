@@ -1,0 +1,20 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-chainlink-node-config
+  namespace: chainlink
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+data:
+  ROOT: '/chainlink'
+  LOG_LEVEL: 'debug'
+  ETH_CHAIN_ID: {{ .Values.chainlink.env.CHAINLINK_ETH_CHAIN_ID | quote }}
+  MIN_OUTGOING_CONFIRMATIONS: '0'
+  MIN_INCOMING_CONFIRMATIONS: '1'
+  LINK_CONTRACT_ADDRESS: {{ .Values.chainlink.env.CHAINLINK_LINK_ADDRESS }}
+  CHAINLINK_TLS_PORT: '0'
+  SECURE_COOKIES: 'false'
+  GAS_ESTIMATOR_MODE: 'BlockHistory'
+  ALLOW_ORIGINS: '*'
+  DATABASE_TIMEOUT: '0'

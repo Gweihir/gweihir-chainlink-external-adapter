@@ -1,6 +1,5 @@
 # Declare variables to be passed into your templates.
 
-
 # Postgresql setup
 postgres:
   image:
@@ -11,11 +10,25 @@ postgres:
   service:
     type: ClusterIP
     port: 80
-    env:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 'ASDFasdf1234@@(0'
-      POSTGRES_DB: admindb
-      CHAINLINK_DB_USER: clnode
-      CHAINLINK_DB_PASSWORD: 'mysecretpassword'
-      CHAINLINK_DB: chainlink
-      POSTGRES_STORAGE_DIR: 
+  env:
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: 'ASDFasdf1234@@(0'
+    POSTGRES_DB: admindb
+    CHAINLINK_DB_USER: clnode
+    CHAINLINK_DB_PASSWORD: 'mysecretpassword'
+    CHAINLINK_DB: chainlink
+    POSTGRES_STORAGE_DIR: 
+
+chainlink:
+  image:
+    repository: smartcontract/chainlink
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 1.11.0-root
+  env:
+    CHAINLINK_USER_EMAIL: 'admin@example.com'
+    CHAINLINK_USER_PASSWORD: 'ASDFasdf1234@@(0'
+    CHAINLINK_WALLET_PASSWORD: 'ASDFasdf1234@@(0'
+    CHAINLINK_ETH_URL: 'ws://host.docker.internal:8545'
+    CHAINLINK_ETH_CHAIN_ID: 1337
+    CHAINLINK_LINK_ADDRESS: 

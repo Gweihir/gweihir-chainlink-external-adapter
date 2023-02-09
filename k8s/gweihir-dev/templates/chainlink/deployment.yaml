@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gweihir-dev.fullname" . }}-chainlink-node
+  namespace: chainlink
+  labels:
+    {{- include "gweihir-dev.labels" . | nindent 4 }}
+    app: {{ include "gweihir-dev.fullname" . }}-chainlink-node
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "gweihir-dev.selectorLabels" . | nindent 6 }}
+      app: {{ include "gweihir-dev.fullname" . }}-chainlink-node
+  template:
+    metadata:
+      labels:
+        {{- include "gweihir-dev.selectorLabels" . | nindent 8 }}
+        app: {{ include "gweihir-dev.fullname" . }}-chainlink-node
+    spec:
+      initContainers:
+        - name: {{ .Chart.Name }}-init
+          image: busybox:latest
+          command: ['sh', '-c', 'echo ${USER_EMAIL} > /chainlink/.api; echo ${USER_PASSWORD} >> /chainlink/.api ; echo ${WALLET_PASS} > /chainlink/.password']
+          envFrom:
+            - secretRef:
+                name: {{ include "gweihir-dev.fullname" . }}-chainlink-node-secret
+          volumeMounts:
+            - name: shared
+              mountPath: /chainlink
+      containers:
+        - name: {{ .Chart.Name }}-chainlink-node
+          image: "{{ .Values.chainlink.image.repository }}:{{ .Values.chainlink.image.tag }}"
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 6688
+          command: ["chainlink","local", "n", "-p", "/chainlink/.password", "-a",  "/chainlink/.api"]
+          envFrom:
+            - secretRef:
+                name: {{ include "gweihir-dev.fullname" . }}-chainlink-node-secret
+            - configMapRef:
+                name: {{ include "gweihir-dev.fullname" . }}-chainlink-node-config
+          volumeMounts:
+            - name: shared
+              mountPath: /chainlink
+      volumes:
+        - name: shared
+          emptyDir: {}
