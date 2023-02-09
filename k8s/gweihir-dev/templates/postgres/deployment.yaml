@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "gweihir-dev.fullname" . }}-postgres
-  namespace: storage
   labels:
     {{- include "gweihir-dev.labels" . | nindent 4 }}
     app: {{ include "gweihir-dev.fullname" . }}-postgres
