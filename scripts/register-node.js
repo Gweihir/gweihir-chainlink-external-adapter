@@ -1,6 +1,6 @@
-const OperatorInterface = require('@chainlink/contracts/abi/v0.8/OperatorInterface.json')
-const conf = require('../../config/addr.json')
-const { getNetworkName, toWei } = require('../utils')
+const Operator = artifacts.require('Operator')
+const conf = require('../config/addr.json')
+const { getNetworkName, toWei } = require('./utils')
 const nodeAddress = process.env.ORACLE_NODE_ADDRESS || ''
 
 module.exports = async (callback) => {
@@ -16,12 +16,11 @@ module.exports = async (callback) => {
     const accounts = await web3.eth.getAccounts()
     const owner = accounts[0]
 
-    const operator = new web3.eth.Contract(OperatorInterface.compilerOutput.abi, operatorAddress)
-    const operatorMethods = operator.methods
+    const operator = await Operator.at(operatorAddress)
 
     console.log(`Set authorized senders ${[nodeAddress]} in Operator ${operatorAddress}`)
-    let tx = await operatorMethods.setAuthorizedSenders([nodeAddress]).send({ from: owner })
-    const authorizedSenders = await operatorMethods.getAuthorizedSenders().call()
+    let tx = await operator.setAuthorizedSenders([nodeAddress], { from: owner })
+    const authorizedSenders = await operator.getAuthorizedSenders()
     console.log(`Get authorized senders: ${authorizedSenders}`)
 
     //Fund node

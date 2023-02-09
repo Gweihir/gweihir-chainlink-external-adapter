@@ -1,6 +1,6 @@
 const Consumer = artifacts.require('Consumer')
-const conf = require('../../config/addr.json')
-const { getNetworkName } = require('../utils')
+const conf = require('../config/addr.json')
+const { getNetworkName } = require('./utils')
 
 const jobId = process.env.CHAINLINK_JOB_ID || ''
 
@@ -16,16 +16,16 @@ module.exports = async (callback) => {
     if (!consumerAddress || !operatorAddress)
       throw new Error(`Operator address or Consumer address not found in ${addr}`)
 
-    const consumer = new web3.eth.Contract(Consumer.abi, consumerAddress)
-    const consumerMethods = consumer.methods
+    const consumer = await Consumer.at(consumerAddress)
 
     const accounts = await web3.eth.getAccounts()
     const owner = accounts[0]
-    const tx = await consumerMethods
-      .requestEthereumPrice(operatorAddress, jobId)
-      .send({ from: owner, gas: gas })
+    const tx = await consumer.requestEthereumPrice(operatorAddress, jobId, {
+      from: owner,
+      gas: gas,
+    })
 
-    callback(tx.transactionHash)
+    callback(tx.tx)
   } catch (err) {
     callback(err)
   }

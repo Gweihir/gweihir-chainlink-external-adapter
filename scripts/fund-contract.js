@@ -1,4 +1,4 @@
-const LinkTokenInterface = require('@chainlink/contracts/abi/v0.8/LinkTokenInterface.json')
+const LinkToken = artifacts.require('LinkToken')
 const { getNetworkName, toWei, toEther } = require('./utils')
 const conf = require('../config/addr.json')
 
@@ -18,14 +18,13 @@ module.exports = async (callback) => {
     const accounts = await web3.eth.getAccounts()
     const [owner] = accounts
 
-    const token = new web3.eth.Contract(LinkTokenInterface.compilerOutput.abi, tokenAddress)
-    const tokenMethods = token.methods
+    const linkToken = await LinkToken.at(tokenAddress)
     console.log(`Funding consumer contract:  ${consumerAddress} of ${toEther(payment)}  LINK`)
     // Fund consumer contract in Links in order to be able to call Oracle contract
-    const tx = await tokenMethods.transfer(consumerAddress, payment).send({ from: owner, gas: gas })
+    const tx = await linkToken.transfer(consumerAddress, payment, { from: owner, gas: gas })
     console.log(
       `Balance of consumer contract ${consumerAddress} is ${toEther(
-        await tokenMethods.balanceOf(consumerAddress).call()
+        await linkToken.balanceOf(consumerAddress)
       )}  LINK`
     )
     callback(tx.transactionHash)
