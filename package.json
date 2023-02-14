@@ -6,17 +6,26 @@
   "repository": "git@github.com:Gweihir/gweihir-chainlink-external-adapter.git",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "start": "ts-node src/app",
+    "dev": "ts-node-dev --watch src --respawn src/app"
+  },
   "devDependencies": {
     "@chainlink/token": "^1.1.0",
     "ganache": "^7.7.3",
     "prettier": "^2.8.3",
     "prettier-plugin-solidity": "^1.1.1",
     "solhint": "^3.3.8",
-    "truffle": "^5.7.4"
+    "truffle": "^5.7.4",
+    "ts-node-dev": "^2.0.0"
   },
   "dependencies": {
     "@chainlink/contracts": "^0.6.0",
+    "body-parser": "^1.20.1",
     "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.5",
     "web3": "^1.8.2"
   }
 }
