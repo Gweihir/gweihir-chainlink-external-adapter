@@ -8,6 +8,7 @@ metadata:
 data:
   ROOT: '/chainlink'
   LOG_LEVEL: 'debug'
+  CHAINLINK_DEV: 'true'
   ETH_CHAIN_ID: {{ .Values.chainlink.env.CHAINLINK_ETH_CHAIN_ID | quote }}
   MIN_OUTGOING_CONFIRMATIONS: '0'
   MIN_INCOMING_CONFIRMATIONS: '1'
