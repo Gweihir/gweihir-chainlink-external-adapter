@@ -1,6 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { requestHeartbeat } from './services'
+import { KusamaAPI } from './services/kusama'
 
 const port = process.env.EA_PORT || 4242
 
@@ -13,11 +13,12 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-  console.log('POST Data: ', req.body)
-
-  const result = await requestHeartbeat({ nonce: req.body.data.nonce })
-  console.log(result)
-  res.json({ data: result })
+  const result = await KusamaAPI.getAccountBalance({ address: req.body.data.address })
+  return res.json({
+    data: {
+      free: result,
+    },
+  })
 })
 
 app.listen(port, () => {

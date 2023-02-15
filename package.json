@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@chainlink/token": "^1.1.0",
+    "@polkadot/api-augment": "^9.14.1",
     "ganache": "^7.7.3",
     "prettier": "^2.8.3",
     "prettier-plugin-solidity": "^1.1.1",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@chainlink/contracts": "^0.6.0",
+    "@polkadot/api": "^9.14.1",
     "body-parser": "^1.20.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
