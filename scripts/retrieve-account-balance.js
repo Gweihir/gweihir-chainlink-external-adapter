@@ -11,10 +11,10 @@ module.exports = async (callback) => {
     if (!consumerAddress) throw new Error(`Consumer address not found in ${addr}`)
 
     const consumer = await Consumer.at(consumerAddress)
-    const currentPrice = await consumer.currentPrice()
+    const currentAccountBalance = await consumer.currentAccountBalance()
 
-    console.log(`Current price is ${currentPrice / 100} USD/ETH`)
-    callback(currentPrice)
+    console.log(`Current account balance is ${currentAccountBalance} Plank`)
+    callback(currentAccountBalance)
   } catch (err) {
     callback(err)
   }

@@ -18,9 +18,12 @@ module.exports = async (callback) => {
 
     const consumer = await Consumer.at(consumerAddress)
 
+    // TODO: Allow for kusama address to be an input
+    const kusamaAddress = 'Gk2FdnhLNnumXWrxjyk7yQstq3CL1Ni4QNCPuTeSjCdDoMh'
+
     const accounts = await web3.eth.getAccounts()
     const owner = accounts[0]
-    const tx = await consumer.requestEthereumPrice(operatorAddress, jobId, {
+    const tx = await consumer.requestKusamaAccountBalance(operatorAddress, jobId, kusamaAddress, {
       from: owner,
       gas: gas,
     })

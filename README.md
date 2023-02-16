@@ -50,15 +50,20 @@ The following instructions should get a new contributor on their feet. This is b
     ```
     npx truffle exec scripts/register-node.js --network ganache
     ```
-1. Create a Chainlink job making sure to replace any template variables (see https://docs.chain.link/chainlink-nodes/v1/fulfilling-requests).
+1. Start external adapter
+    ```
+    yarn dev
+    ```
+1. Add a bridge to the Chainlink node with the name of `test` and URL of `http://host.docker.internal:4242` on this page: http://localhost:6688/bridges
+1. Create a Chainlink job making sure to replace any template variables from `jobs/sample.toml`.
 1. Set the `CHAINLINK_JOB_ID` environment variable to the job's "External Job ID" making sure to remove any hyphens (the string should only contain 32 characters)!
 1. Make call to Chainlink Operator via Consumer contract:
     ```
-    npx truffle exec scripts/req-eth-price.js --network ganache
+    npx truffle exec scripts/req-account-balance.js --network ganache
     ```
 1. Retrieve the data from the Consumer after the Chainlink node has submitted results back to Consumer:
     ```
-    npx truffle exec scripts/retrieve-eth-price.js --network ganache
+    npx truffle exec scripts/retrieve-account-balance.js --network ganache
     ```
 
 

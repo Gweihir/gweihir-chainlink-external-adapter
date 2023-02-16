@@ -9,9 +9,9 @@ contract Consumer is ChainlinkClient, ConfirmedOwner {
 
   uint256 private constant ORACLE_PAYMENT = 1 * LINK_DIVISIBILITY;
 
-  uint256 public currentPrice;
+  uint256 public currentAccountBalance;
 
-  event RequestEthereumPriceFulfilled(bytes32 indexed requestId, uint256 indexed price);
+  event RequestKusamaAccountBalanceFulfilled(bytes32 indexed requestId, uint256 indexed freePlank);
 
   constructor(address _link) ConfirmedOwner(msg.sender) {
     if (_link == address(0)) {
@@ -21,24 +21,23 @@ contract Consumer is ChainlinkClient, ConfirmedOwner {
     }
   }
 
-  function requestEthereumPrice(address _oracle, string memory _jobId) public onlyOwner {
+  function requestKusamaAccountBalance(address _oracle, string memory _jobId, string memory kusamaAddress) public onlyOwner {
     Chainlink.Request memory req = buildChainlinkRequest(
       stringToBytes32(_jobId),
       address(this),
-      this.fulfillEthereumPrice.selector
+      this.fulfillKusamaAccountBalance.selector
     );
-    req.add("get", "https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD");
-    req.add("path", "USD");
-    req.addInt("times", 100);
+    req.add("address", kusamaAddress);
+    req.add("path", "data,free");
     sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
   }
 
-  function fulfillEthereumPrice(
+  function fulfillKusamaAccountBalance(
     bytes32 _requestId,
-    uint256 _price
+    uint256 _freePlank
   ) public recordChainlinkFulfillment(_requestId) {
-    emit RequestEthereumPriceFulfilled(_requestId, _price);
-    currentPrice = _price;
+    emit RequestKusamaAccountBalanceFulfilled(_requestId, _freePlank);
+    currentAccountBalance = _freePlank;
   }
 
   function getChainlinkToken() public view returns (address) {
