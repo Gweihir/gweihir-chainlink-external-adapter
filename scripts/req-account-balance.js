@@ -18,15 +18,22 @@ module.exports = async (callback) => {
 
     const consumer = await Consumer.at(consumerAddress)
 
-    // TODO: Allow for kusama address to be an input
+    // TODO: Allow for kusama address and block hash to be inputs
     const kusamaAddress = 'Gk2FdnhLNnumXWrxjyk7yQstq3CL1Ni4QNCPuTeSjCdDoMh'
+    const kusamaBlockHash = '0xfd20e7e096c6e988ef59e2b2f9940aed610afc8768cb885dec54ee9a39d8995a'
 
     const accounts = await web3.eth.getAccounts()
     const owner = accounts[0]
-    const tx = await consumer.requestKusamaAccountBalance(operatorAddress, jobId, kusamaAddress, {
-      from: owner,
-      gas: gas,
-    })
+    const tx = await consumer.requestKusamaAccountBalance(
+      operatorAddress,
+      jobId,
+      kusamaAddress,
+      kusamaBlockHash,
+      {
+        from: owner,
+        gas: gas,
+      }
+    )
 
     callback(tx.tx)
   } catch (err) {

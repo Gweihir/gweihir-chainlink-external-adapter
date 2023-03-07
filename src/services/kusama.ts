@@ -22,10 +22,20 @@ export class KusamaAPI {
    *   See more here: https://guide.kusama.network/docs/learn-account-advanced
    * @returns {Promise<string>} - Planck amount
    */
-  public static getAccountBalance = async ({ address }: { address: string }): Promise<string> => {
+  public static getAccountBalance = async ({
+    address,
+    blockHash,
+  }: {
+    address: string
+    blockHash: string
+  }): Promise<string> => {
     const api = await KusamaAPI.getApi()
 
-    const result = await api.query.system.account(address)
+    // TODO: Have block hash/number be optional
+
+    const block = await api.at(blockHash)
+
+    const result = await block.query.system.account(address)
 
     return result.data.free.toString()
   }

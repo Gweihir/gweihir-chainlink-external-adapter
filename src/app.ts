@@ -1,6 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { KusamaAPI } from './services/kusama'
+import z from 'zod'
 
 const port = process.env.EA_PORT || 4242
 
@@ -13,7 +14,14 @@ app.get('/', (req, res) => {
 })
 
 app.post('/', async (req, res) => {
-  const result = await KusamaAPI.getAccountBalance({ address: req.body.data.address })
+  // Throws if invalid object per schema definition
+  const body = GetAccountBalanceRequestSchema.parse(req.body)
+
+  const result = await KusamaAPI.getAccountBalance({
+    address: body.data.address,
+    blockHash: body.data.blockHash,
+  })
+
   return res.json({
     data: {
       free: result,
@@ -23,4 +31,8 @@ app.post('/', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Started listening at http://localhost:${port}`)
+})
+
+const GetAccountBalanceRequestSchema = z.object({
+  data: z.object({ address: z.string(), blockHash: z.string() }),
 })

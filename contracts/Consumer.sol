@@ -21,23 +21,24 @@ contract Consumer is ChainlinkClient, ConfirmedOwner {
     }
   }
 
-  function requestKusamaAccountBalance(address _oracle, string memory _jobId, string memory kusamaAddress) public onlyOwner {
+  function requestKusamaAccountBalance(address _oracle, string memory _jobId, string memory kusamaAddress, string memory kusamaBlockHash) public onlyOwner {
     Chainlink.Request memory req = buildChainlinkRequest(
       stringToBytes32(_jobId),
       address(this),
       this.fulfillKusamaAccountBalance.selector
     );
     req.add("address", kusamaAddress);
+    req.add("blockHash", kusamaBlockHash);
     req.add("path", "data,free");
     sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
   }
 
   function fulfillKusamaAccountBalance(
-    bytes32 _requestId,
-    uint256 _freePlank
-  ) public recordChainlinkFulfillment(_requestId) {
-    emit RequestKusamaAccountBalanceFulfilled(_requestId, _freePlank);
-    currentAccountBalance = _freePlank;
+    bytes32 requestId,
+    uint256 freePlank
+  ) public recordChainlinkFulfillment(requestId) {
+    emit RequestKusamaAccountBalanceFulfilled(requestId, freePlank);
+    currentAccountBalance = freePlank;
   }
 
   function getChainlinkToken() public view returns (address) {

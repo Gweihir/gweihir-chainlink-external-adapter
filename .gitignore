@@ -1,6 +1,8 @@
 build/
 node_modules/
 postgres-data/
+postgres-data*/
+.DS_Store
 .env
 .envrc
 .values.local.yaml
