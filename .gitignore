@@ -2,6 +2,7 @@ build/
 node_modules/
 postgres-data/
 postgres-data*/
+coverage/
 .DS_Store
 .env
 .envrc
