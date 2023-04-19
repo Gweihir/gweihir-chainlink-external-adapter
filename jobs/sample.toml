@@ -16,7 +16,7 @@ observationSource = """
                   topics="$(jobRun.logTopics)"]
 
     decode_cbor  [type="cborparse" data="$(decode_log.data)"]
-    bridge       [type=bridge name="test" requestData="{\\"id\\": \\"0\\", \\"data\\": { \\"address\\": $(decode_cbor.address), \\"blockHash\\": $(decode_cbor.blockHash), \\"blockNumber\\": $(decode_cbor.blockNumber)}}"]
+    bridge       [type=bridge name="test" requestData="{\\"id\\": \\"0\\", \\"data\\": { \\"address\\": $(decode_cbor.address), \\"blockHash\\": $(decode_cbor.blockHash)}}"]
     parse        [type="jsonparse" path="$(decode_cbor.path)" data="$(bridge)"]
 
     encode_data  [type="ethabiencode" abi="(bytes32 requestId, uint256 value)" data="{ \\"requestId\\": $(decode_log.requestId), \\"value\\": $(parse) }"]
