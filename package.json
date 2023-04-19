@@ -9,12 +9,14 @@
   "scripts": {
     "start": "ts-node src/app",
     "dev": "ts-node-dev --watch src --respawn src/app",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.21.0",
+    "@chainlink/contracts": "^0.6.0",
     "@chainlink/token": "^1.1.0",
     "@polkadot/api-augment": "^9.14.1",
     "@truffle/hdwallet-provider": "^2.1.9",
@@ -27,17 +29,15 @@
     "solhint": "^3.3.8",
     "truffle": "^5.7.4",
     "ts-jest": "^29.0.5",
-    "ts-node-dev": "^2.0.0"
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.9.5",
+    "web3": "^1.8.2"
   },
   "dependencies": {
-    "@chainlink/contracts": "^0.6.0",
     "@polkadot/api": "^9.14.1",
     "body-parser": "^1.20.1",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.5",
-    "web3": "^1.8.2",
     "zod": "^3.20.6"
   },
   "engines": {
