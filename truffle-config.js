@@ -1,7 +1,7 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider')
 
-const WALLET_MNEMONIC = process.INFURA_API_KEY
-const INFURA_API_KEY = process.INFURA_API_KEY
+const WALLET_MNEMONIC = process.env.WALLET_MNEMONIC
+const INFURA_API_KEY = process.env.INFURA_API_KEY
 
 module.exports = {
   networks: {
