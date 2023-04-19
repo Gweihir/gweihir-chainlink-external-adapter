@@ -17,6 +17,7 @@
     "@babel/preset-typescript": "^7.21.0",
     "@chainlink/token": "^1.1.0",
     "@polkadot/api-augment": "^9.14.1",
+    "@truffle/hdwallet-provider": "^2.1.9",
     "@types/jest": "^29.5.0",
     "babel-jest": "^29.5.0",
     "ganache": "^7.7.3",
