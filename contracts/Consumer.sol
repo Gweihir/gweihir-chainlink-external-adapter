@@ -7,7 +7,7 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 contract Consumer is ChainlinkClient, ConfirmedOwner {
   using Chainlink for Chainlink.Request;
 
-  uint256 private constant ORACLE_PAYMENT = 1 * LINK_DIVISIBILITY;
+  uint256 private constant ORACLE_PAYMENT = LINK_DIVISIBILITY / 100;
 
   uint256 public currentAccountBalance;
 
@@ -30,6 +30,7 @@ contract Consumer is ChainlinkClient, ConfirmedOwner {
     req.add("address", kusamaAddress);
     req.add("blockHash", kusamaBlockHash);
     req.add("path", "data,free");
+    // TODO: Allow user to request specific value(s) from JSON object response; e.g., req.add("jq", "[.version, .name, .value]");
     sendChainlinkRequestTo(_oracle, req, ORACLE_PAYMENT);
   }
 
