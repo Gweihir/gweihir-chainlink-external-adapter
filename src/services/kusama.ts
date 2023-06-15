@@ -21,29 +21,28 @@ export class KusamaAPI {
    * If both `blockHash` and `blockNumber` are provided, then `blockHash` will be used and `blockNumber` will be ignored.
    * @param {string} input.address - Kusama account address (in SS58 format)
    *   See more here: https://guide.kusama.network/docs/learn-account-advanced
-   * @param {string | undefined} input.blockHash - Block hash of block to be queried for account balance
-   * @param {number | undefined} input.blockNumber - Block number of block to be queried for account balance
+   * @param {string | undefined} input.blockNumberOrHash - Block hash or number of block to be queried for account balance
    * @returns {Promise<string>} - Planck amount
    */
   public static getAccountBalance = async ({
     address,
-    blockHash,
-    blockNumber,
+    blockNumberOrHash,
   }: {
     address: string
-    blockHash?: string
-    blockNumber?: number
+    blockNumberOrHash?: string
   }): Promise<string> => {
     const api = await KusamaAPI.getApi()
 
-    if (blockHash) {
+    if (blockNumberOrHash) {
+      // Assume that the block is in hash format if it starts with 0x
+      const isHash = blockNumberOrHash.toLowerCase().startsWith('0x') // TODO: Confirm that assumption is correct
+
+      // Lookup block hash
+      const blockHash = isHash
+        ? blockNumberOrHash
+        : (await api.rpc.chain.getBlockHash(blockNumberOrHash)).toString()
+
       // Get block and query that specific block
-      const block = await api.at(blockHash)
-      const result = await block.query.system.account(address)
-      return result.data.free.toString()
-    } else if (blockNumber !== undefined) {
-      // Lookup block hash, get block, and then query that specific block
-      const blockHash = await api.rpc.chain.getBlockHash(blockNumber)
       const block = await api.at(blockHash)
       const result = await block.query.system.account(address)
       return result.data.free.toString()

@@ -19,8 +19,7 @@ app.post('/', async (req, res) => {
 
   const result = await KusamaAPI.getAccountBalance({
     address: body.data.address,
-    blockHash: body.data.blockHash,
-    blockNumber: body.data.blockNumber,
+    blockNumberOrHash: body.data.block,
   })
 
   return res.json({
@@ -37,7 +36,6 @@ app.listen(port, () => {
 const GetAccountBalanceRequestSchema = z.object({
   data: z.object({
     address: z.string(),
-    blockHash: z.string().optional(),
-    blockNumber: z.number().int().optional(),
+    block: z.string().trim().optional(),
   }),
 })
