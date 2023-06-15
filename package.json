@@ -28,6 +28,7 @@
     "prettier-plugin-solidity": "^1.1.1",
     "solhint": "^3.3.8",
     "truffle": "^5.7.4",
+    "truffle-plugin-verify": "^0.6.3",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",

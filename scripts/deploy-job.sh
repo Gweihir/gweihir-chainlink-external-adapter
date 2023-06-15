@@ -6,7 +6,7 @@ OPERATOR_ADDRESS=`cat config/addr.json | jq .ganache.operatorAddress -r`
 formated_date=`date +%Y-%m-%dT%H:%M:%S`
 
 # Create bridge
-echo "{\"confirmations\": 0, \"minimumContractPayment\": \"0\", \"name\": \"test\", \"url\": \"http://host.docker.internal:4242\" }" | \
+echo "{\"confirmations\": 0, \"minimumContractPayment\": \"0\", \"name\": \"gweihir\", \"url\": \"http://host.docker.internal:4242\" }" | \
 kubectl exec -i deployment/gweihir-gweihir-dev-chainlink-node -- \
 bash -c "cat - > /home/root/bridge.json && chainlink admin login -f /chainlink/.api && chainlink bridges create /home/root/bridge.json"
 

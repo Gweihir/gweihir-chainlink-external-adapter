@@ -1,3 +1,5 @@
+// npx truffle exec scripts/req-account-balance.js --network ganache
+
 const Consumer = artifacts.require('Consumer')
 const conf = require('../config/addr.json')
 const { getNetworkName } = require('./utils')
@@ -37,6 +39,7 @@ module.exports = async (callback) => {
 
     callback(tx.tx)
   } catch (err) {
+    console.error(err)
     callback(err)
   }
 }

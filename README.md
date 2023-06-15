@@ -33,7 +33,7 @@ The following instructions should get a new contributor on their feet. This is b
       env:
         CHAINLINK_LINK_ADDRESS: <LINK-contract-address>
     ```
-    The `POSTGRES_STORAGE_DIR` should point to a directory that will be populated with the Postgres data. For example, `/Users/guy/gweihir/gweihir-chainlink-external-adapter/postgres-data`.  
+    The `POSTGRES_STORAGE_DIR` should point to a directory that will be populated with the Postgres data. For example, `/Users/guy/gweihir/gweihir-chainlink-external-adapter/postgres-data`. Make sure this directory exists before installing the Helm chart.  
     The `CHAINLINK_LINK_ADDRESS` should be set to the Ethereum contract address to the locally deployed LINK smart contract which can be found in `./config/addr.json`.
 1. Stand up Postgres and a Chainlink node with Kubernetes and Helm:
     ```
@@ -54,7 +54,7 @@ The following instructions should get a new contributor on their feet. This is b
     ```
     yarn dev
     ```
-1. Add a bridge to the Chainlink node with the name of `test` and URL of `http://host.docker.internal:4242` on this page: http://localhost:6688/bridges
+1. Add a bridge to the Chainlink node with the name of `gweihir` and URL of `http://host.docker.internal:4242` on this page: http://localhost:6688/bridges
 1. Create a Chainlink job making sure to replace any template variables from `jobs/sample.toml`.
 1. Set the `CHAINLINK_JOB_ID` environment variable to the job's "External Job ID" making sure to remove any hyphens (the string should only contain 32 characters)!
 1. Make call to Chainlink Operator via Consumer contract:
@@ -66,6 +66,13 @@ The following instructions should get a new contributor on their feet. This is b
     npx truffle exec scripts/retrieve-account-balance.js --network ganache
     ```
 
+### Public Testnet
+Run the following to verify the Consumer contract source code on Etherscan and Sourcify:
+```
+npx truffle run verify Consumer --network testnet
+```
+
+Make sure to fund the Consumer contract with LINK token on the testnet.
 
 ## Appreciation
 This project is influenced by https://github.com/aelmanaa/chainlink-local-kubernetes and 

@@ -2,6 +2,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 
 const WALLET_MNEMONIC = process.env.WALLET_MNEMONIC
 const INFURA_API_KEY = process.env.INFURA_API_KEY
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 
 module.exports = {
   networks: {
@@ -30,5 +31,9 @@ module.exports = {
         },
       },
     },
+  },
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    etherscan: ETHERSCAN_API_KEY,
   },
 }
